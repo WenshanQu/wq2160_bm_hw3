@@ -309,8 +309,9 @@ Use your results from Sample A: graphs, estimates, confidence intervals, and/or 
 
 **Answer**
 
-We randomly sampled 200 individuals from HSCRC database with 100 men and 100 women, for the purpose of finding the difference of mean CE costs between men and women in Maryland for the period 1990 through 1995. After plotting our sample with histogram and boxplot, we can see that there is a slight difference between the mean CE costs of men and women, specificlly, the average cost for women is about 570 USD higher than men in this sample.
-Using this sample, we try to assume the true value for underlying population. After calculation, we are 95% confident that there is no significant difference of average CE cost between men and women.
+We randomly sampled 200 individuals from HSCRC database with 100 men and 100 women, for the purpose of finding the difference of mean CE costs between men and women in Maryland for the period 1990 through 1995. After plotting our sample with histogram and boxplot, we can see that there is a slight difference between the mean CE costs of men and women, specifically, the average cost for women is about 570 USD higher than men in this sample.
+Using this sample, we try to assume the true value for underlying population. For men patients, we are 95% confident that the true mean CE cost of population is between 5202.041 USD and 6910.899 USD; and for women patients, we are 95% confident that the true mean CE cost of population is between 5771.193 USD and 7477.367 USD.
+In addition, we compared whether there is a difference of mean CE cost between men and women. After calculation, we are 95% confident that there is NO significant difference of average CE cost between men and women. And we are 95% confident that the true difference of average CE costs between men and women lies between -1773.83 USD and 638.21 USD.
 
 ## Problem 9
 Now for the truth, which we have the luxury of knowing in this problem set. Compute the actual mean CE cost for men and for women for the whole population (CE8130entire.csv). Also calculate the difference. Do your 95% CIs include the true means?
@@ -346,7 +347,7 @@ If each student in a class of 140 calculates a 95% confidence interval for ( µ 
 
 **Answer**
 
-For the defination of CI, it's "Over the collection of all 95% CIs that could be constructed from repeated samples of size n, 95% of them will contain the true population mean". So for each student, they have the probability of 0.95 to contain true mean difference. 
+For the definition of CI, it's "Over the collection of all 95% CIs that could be constructed from repeated samples of size n, 95% of them will contain the true population mean". So for each student, they have the probability of 0.95 to contain true mean difference. 
 Then the probability of all 140 contain the true population mean difference:
 ```{r}
 ## Expectation
