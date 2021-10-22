@@ -1,7 +1,9 @@
 ---
 title: "P8130_hw2_wq2160"
 author: "Wenshan Qu (wq2160)"
-output: html_document
+output:
+  pdf_document: 
+    latex_engine: xelatex
 ---
 
 ```{r, include = FALSE}
@@ -10,8 +12,11 @@ library(dplyr)
 library(Rmisc)
 ```
 
+
 ## Problem 1
+
 Draw a random sample without replacement of 200 observations (100 men and 100 women) from the entire CE data set named ce8130entire.csv. Call this first sample “A” and save the sample. In “sex” variable, **men** are identified by **“1”**, and **women** by **“2”**. Note: To obtain the sample data set of approximately 200 observations, you can use the following code. Replace the “set.seed” number with an integer of your choice (3 points).
+
 ```{r}
 population = read.csv("./ce8130entire.csv")
 
@@ -25,7 +30,9 @@ A
 ```
 
 ## Problem 2
+
 Now use the same seed as before but this time draw a random sample without replacement of 60 observations (30 men and 30 women) and call it sample “B” (Note that Sample “B” is more than 3 times smaller than sample “A”). Save it as a separate sample. Replace the seed number with the same seed number as you used above (3 points).
+
 ```{r}
 set.seed(33)
 B = 
@@ -37,6 +44,7 @@ B
 ```
 
 ## Problem 3
+
 Using sample “A”, display the distribution of CE cost in $USD (variable name: “totchg”) separately for men and women using side-by-side boxplots and histograms. Label your figures appropriately.
 
 **Histogram**
@@ -81,9 +89,11 @@ boxp_plot
 ```
 
 ## Problem 4
-Calculate the mean CE cost and 95% confidence interval separately for men and women in sample “A” as well as sample “B”. Assume we don’t know the population variance. Plot the sample “A” and sample “B” confidence intervals next to each other (by sex). How do they differ, which confidence intervals are wider? Explain why. ##Note: For the purposes of confidence interval estimation and hypothesis testing, let’s assume that all the assumptions, including the assumption of normal distribution, are met.
 
-#### 4.1 Plot sample A and B CI
+Calculate the mean CE cost and 95% confidence interval separately for men and women in sample “A” as well as sample “B”. Assume we don’t know the population variance. Plot the sample “A” and sample “B” confidence intervals next to each other (by sex). How do they differ, which confidence intervals are wider? Explain why.
+
+**Plot CI of sample A and B**
+
 ```{r}
 A_s = 
   A %>% 
@@ -97,12 +107,11 @@ AB_df = rbind(A_s, B_s)
 
 p_dodge = position_dodge(0.1)
 
-AB_plot = 
 AB_df %>% 
   mutate(sex = recode(sex, "1" = "men", "2" = "women")) %>% 
   summarySE(measurevar = "totchg", groupvars = c("sex", "sample")) %>% 
   ggplot(aes(x = sex, y = totchg, color = sex)) +
-  geom_point() +
+  geom_point(position = p_dodge) +
   geom_errorbar(aes(ymin = totchg - ci, ymax = totchg + ci), width = .1, position = p_dodge) +
   facet_grid(. ~ sample) +
   labs(
@@ -113,14 +122,10 @@ AB_df %>%
   ) +
   theme_bw() +
   theme(legend.position = "none")
-
-AB_plot
 ```
 
-#### 4.2 Manually calculation for Sample A
-
-**mean CE cost and 95% confidence interval for MEN**
-```{r}
+**mean CE cost and 95% confidence interval for MEN in Sample A** 
+```{r collapse = TRUE}
 A_men = 
 A %>% 
   filter(sex == "1")
@@ -144,8 +149,9 @@ lower1 = x1 - t1 * s1 / sqrt(n1)
 upper1
 lower1
 ```
-**mean CE cost and 95% confidence interval for WOMEN**
-```{r}
+
+**mean CE cost and 95% confidence interval for WOMEN in Sample A**
+```{r collapse = TRUE}
 A_women = 
 A %>% 
   filter(sex == "2")
@@ -170,10 +176,8 @@ upper2
 lower2
 ```
 
-#### 4.3 Manually calculation for Sample B
-
-**mean CE cost and 95% confidence interval for MEN**
-```{r}
+**mean CE cost and 95% confidence interval for MEN in Sample B**
+```{r collapse = TRUE}
 B_men = 
 B %>% 
   filter(sex == "1")
@@ -197,8 +201,8 @@ lower3 = x3 - t3 * s3 / sqrt(n3)
 upper3
 lower3
 ```
-**mean CE cost and 95% confidence interval for WOMEN**
-```{r}
+**mean CE cost and 95% confidence interval for WOMEN in Sample B**
+```{r collapse = TRUE}
 B_women = 
 B %>% 
   filter(sex == "2")
@@ -235,7 +239,7 @@ Q3: Explain why?
 
 A3: Sample A and B come from the same source population, then the total "trend" in these two samples should be nearly the same, which means they are shows that 1) the CE cost of women is higher than men; and 2) there is no significantly CI difference between women and men. However, Sample A have a size of 200, Sample B only have 60 sample size, so the latter one may more far away from the truth.
 
-```{r}
+```{r collapse = TRUE}
 ## We can simply calculate the CI interval for each group
 upper1-lower1 ## Sample A Men
 upper2-lower2 ## Sample A Women
@@ -260,7 +264,7 @@ F_crit = qf(0.975, 99, 99)
 ## Decision
 ifelse(F_test > F_crit, "reject", "fail to reject")
 ```
-Conclusion: In Method 1, the p-value is 0.9875 > 0.05, we can not reject null hypothesis; In Method 2, the test statistic is 1.00315 < F critical value = 1.486, which means it falls into the fail to reject region. Combinding results above, we can say that **The variance of CE cost among men and women in sample A statistically have no significant difference. In other words, in sample A, the variances of CE cost among men and women are equal.** 
+Conclusion: In Method 1, the p-value is 0.9875 > 0.05, we can not reject null hypothesis; In Method 2, the test statistic is 1.00315 < F critical value = 1.486, which means it falls into the fail to reject region. Combining results above, we can say that **The variance of CE cost among men and women in sample A statistically have no significant difference. In other words, in sample A, the variances of CE cost among men and women are equal.** 
 
 ## Problem 6
 Using sample “A”, calculate the difference between the mean CE costs for men and women (cost in men -cost in women). Calculate a 95% CI for this difference. Assume we don’t know the population variance. Your decision of equal vs unequal variance should be based on your answer in Problem 5.
@@ -298,7 +302,7 @@ Also, we can use this method:
 ```{r}
 t.test(totchg ~ sex, data = A, var.equl = TRUE)
 ```
-Intepretation: Combining two results, we fail to reject the null hypotheses, and we can conclude that there is no significant difference of CE cost between men and women.
+Interpretation: Combining two results, we fail to reject the null hypotheses, and we can conclude that there is no significant difference of CE cost between men and women.
 
 ## Problem 8
 Use your results from Sample A: graphs, estimates, confidence intervals, and/or test results, to write a one paragraph summary of your findings regarding the average costs of CE for men and women. Write as if for an audience of health services researchers. Be quantitative and use health-services language, rather than statistical jargon in your write-up.
@@ -309,7 +313,7 @@ We randomly sampled 200 individuals from HSCRC database with 100 men and 100 wom
 Using this sample, we try to assume the true value for underlying population. After calculation, we are 95% confident that there is no significant difference of average CE cost between men and women.
 
 ## Problem 9
-Now for the truth, which we have the luxury of knowing in this problem set. Compute the actual mean CE cost for men ( µ M ) and for women ( µ W ) for the whole population (CE8130entire.csv). Also calculate the difference ( µ M − µ W ). Do your 95% CIs include the true means?
+Now for the truth, which we have the luxury of knowing in this problem set. Compute the actual mean CE cost for men and for women for the whole population (CE8130entire.csv). Also calculate the difference. Do your 95% CIs include the true means?
 ```{r}
 pop_men = 
 population %>% 
