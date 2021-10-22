@@ -1,5 +1,5 @@
 ---
-title: "P8130_hw2_wq2160"
+title: "P8130_hw3_wq2160"
 author: "Wenshan Qu (wq2160)"
 output:
   pdf_document: 
@@ -349,6 +349,8 @@ If each student in a class of 140 calculates a 95% confidence interval for ( µ 
 For the defination of CI, it's "Over the collection of all 95% CIs that could be constructed from repeated samples of size n, 95% of them will contain the true population mean". So for each student, they have the probability of 0.95 to contain true mean difference. 
 Then the probability of all 140 contain the true population mean difference:
 ```{r}
+## Expectation
+0.95*140
 ## Probability
 0.95^140
 ```
